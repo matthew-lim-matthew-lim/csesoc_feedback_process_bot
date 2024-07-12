@@ -8,6 +8,5 @@ sheet_id = os.getenv('GOOGLE_SHEET_ID')
 
 df = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv")
 
-print(df)
-
-print(df["Port"])
+for index, row in df.iterrows():
+    print(f"Row {index}: {row.to_dict()}")
