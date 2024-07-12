@@ -65,6 +65,6 @@ async def send_daily_ping():
         print(f'Guild with ID {guild_id} not found.')
 
 # Schedule the task to run every day at a specific time (in 24 hour time)
-scheduler.add_job(send_daily_ping, 'cron', hour=1, minute=29)
+scheduler.add_job(send_daily_ping, 'cron', hour=1, minute=32)
 
 bot.run(os.getenv('DISCORD_TOKEN'))
