@@ -8,6 +8,7 @@ Improve collection of feedback from attendees by reminding CSESoc directors to s
     - Retrieving the relevant roles might be a bit difficult, as it is not build in.
         - Either do this by using confluence automation to message the bot in a channel that is only for the bot, and then the bot stores it in a dictionary that maps events to roles.
         - OR: Scrape the `pipeline` discord channel. This is way more sus since the titles can be inconsistent in the `pipeline` discord channel.
+    - Either way, it will be more difficult to write to the Feedback Spreadsheet using the bot because then we have to use the sheets API, which is a bit overkill. Therefore, it will make more sense to store the relevant channels in the bot. Could potentially also write to a `.json` file.
 
 ### Installs on your VM
 
