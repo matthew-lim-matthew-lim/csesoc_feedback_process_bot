@@ -44,7 +44,7 @@ In Confluence Automation, make a new automation rule.
 
 The automation rule should be like this:
 
-
+![alt text](documentation_images/jira_pipeline_automation.png)
 
 **Webhook:** 
 
@@ -77,3 +77,7 @@ ngrok-skip-browser-warning: true
 ```
 
 Clean and easy to use!
+
+### TODO:
+
+- Now that we have the post request, we need to store the `issue_responsible_ports` according to the `issue_summary`. We can store this in a `.json` file. Then, when the bot is scheduled to do the ping, we can read from the `.json` and from the sheets, pinging for the events that do not have the feedback filled checked off.
