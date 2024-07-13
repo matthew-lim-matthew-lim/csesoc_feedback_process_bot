@@ -1,6 +1,14 @@
 # csesoc_feedback_process_bot
 Improve collection of feedback from attendees by reminding CSESoc directors to send out feedback forms.
 
+### What this Bot does
+- Reads Feedback Master Sheet to see which Events have had their feedback filled out.
+    - It does this by looking at the `Completed` column for the `Feedback Form` column.
+- Pings relevant directors/roles on a daily basis until the feedback form is filled out (as per the columns).
+    - Retrieving the relevant roles might be a bit difficult, as it is not build in.
+        - Either do this by using confluence automation to message the bot in a channel that is only for the bot, and then the bot stores it in a dictionary that maps events to roles.
+        - OR: Scrape the `pipeline` discord channel. This is way more sus since the titles can be inconsistent in the `pipeline` discord channel.
+
 ### Installs on your VM
 
 - The packages will vary, refer to the `main.py` to see what is required.
