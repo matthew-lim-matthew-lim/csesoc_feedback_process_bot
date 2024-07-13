@@ -28,3 +28,52 @@ Improve collection of feedback from attendees by reminding CSESoc directors to s
         - If you used Oracle Cloud and upgraded to python 3.9, make sure you launch it with the correct version.
 - To see the open `tmux` windows, do `tmux ls`. 
 - To access a `tmux` window, do `tmux a -t [terminal index]` (eg. `tmux a -t 0`).
+
+### Documentation
+
+- Start the local server with `python3 flask_server.py`.
+- Make the local server accessible online with ngrok.
+
+- Retrieving the custom field name
+
+![alt text](documentation_images/retrieve_custom_field_name.png)
+
+#### Connecting to Confluence Automation
+
+In Confluence Automation, make a new automation rule.
+
+The automation rule should be like this:
+
+
+
+**Webhook:** 
+
+Web Request URL:
+
+`https://f93c-203-206-93-78.ngrok-free.app/jira-webhook` (Post Request)
+
+Webhook Contents:
+
+(Select Custom Data)
+```
+{
+"issue_summary": "{{issue.summary}}",
+"issue_url": "{{issue.url}}",
+"issue_responsible_ports": "{{issue.fields.customfield_10032}}"
+}
+```
+
+Webhook Header:
+
+```
+ngrok-skip-browser-warning: true
+```
+
+**The post request we receive:**
+
+```
+127.0.0.1 - - [13/Jul/2024 15:59:55] "POST /jira-webhook HTTP/1.1" 200 -
+{'issue_summary': 'test2', 'issue_url': 'https://csesoc.atlassian.net/browse/PIPE-452', 'issue_responsible_ports': 'Online, Training Program'}
+```
+
+Clean and easy to use!
