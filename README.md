@@ -6,7 +6,8 @@ Improve collection of feedback from attendees by reminding CSESoc directors to s
     - It does this by looking at the `Completed` column for the `Feedback Form` column.
 - Pings relevant directors/roles on a daily basis until the feedback form is filled out (as per the columns).
     - Retrieving the relevant roles might be a bit difficult, as it is not build in.
-        - Either do this by using confluence automation to message the bot in a channel that is only for the bot, and then the bot stores it in a dictionary that maps events to roles.
+        - Either do this by using confluence automation to message the bot in a channel that is only for the bot, and then the bot stores it in a dictionary that maps events to roles. Seems a bit straightforward (we have a script that pings Creative directors automatically) but is clunky.
+        - OR: Send a webhook from the jira pipeline to our program (probably a flask server). Clean solution but could introduce more issues due to complexity.
         - OR: Scrape the `pipeline` discord channel. This is way more sus since the titles can be inconsistent in the `pipeline` discord channel.
     - Either way, it will be more difficult to write to the Feedback Spreadsheet using the bot because then we have to use the sheets API, which is a bit overkill. Therefore, it will make more sense to store the relevant channels in the bot. Could potentially also write to a `.json` file.
 
