@@ -7,16 +7,6 @@ Improve collection of feedback from attendees by reminding CSESoc directors to s
     - I expect that this will be sufficient, since we can introduce a process where relevant Directors or Subcom that were pinged need to start a thread with their feedback collection.
         - This is superior to using the bot to ping on a cycle because it reduces clutter on the channel from duplicate messages. The issue with clutter is twofold: Firstly, people using the channel might be annoyed and mute/ignore it. Secondly, because there would be multiple threads and messages, it would be difficult to keep track of feedback collection.
 
-### Initial planning for the bot (Kept only for Documentation purposes)
-- Reads Feedback Master Sheet to see which Events have had their feedback filled out.
-    - It does this by looking at the `Completed` column for the `Feedback Form` column.
-- Pings relevant directors/roles on a daily basis until the feedback form is filled out (as per the columns).
-    - Retrieving the relevant roles might be a bit difficult, as it is not build in.
-        - Either do this by using confluence automation to message the bot in a channel that is only for the bot, and then the bot stores it in a dictionary that maps events to roles. Seems a bit straightforward (we have a script that pings Creative directors automatically) but is clunky.
-        - OR: Send a webhook from the jira pipeline to our program (probably a flask server). Clean solution but could introduce more issues due to complexity.
-        - OR: Scrape the `pipeline` discord channel. This is way more sus since the titles can be inconsistent in the `pipeline` discord channel.
-    - Either way, it will be more difficult to write to the Feedback Spreadsheet using the bot because then we have to use the sheets API, which is a bit overkill. Therefore, it will make more sense to store the relevant channels in the bot. Could potentially also write to a `.json` file.
-
 ### Installs on your VM
 
 - The packages will vary, refer to the `main.py` to see what is required.
@@ -90,3 +80,30 @@ ngrok-skip-browser-warning: true
 ```
 
 Clean and easy to use!
+
+### Example of this bot being used as intended:
+
+- The Jira Pipeline contains all the events.
+
+![alt text](image-1.png)
+
+- Moving the event from `Launched To Done` when the event has taken place already. We now need to collect feedback (which is often forgotten). 
+- Our bot will help increase accountability and facilitate easier tracking of feedback for events. In turn, this will enable us to collect more rigorous data and feedback (as well as in more detail as we collect the feedback sooner), ultimately allowing us to improve event quality and better contribute to the CSE community.
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+- The request goes to `ngrok`.
+
+![alt text](image-5.png)
+
+- `ngrok` tunnels the request to Flask.
+
+![alt text](image-4.png)
+
+- The bot pings the appropriate portfolios daily at a certain time.
+    - Note that the edgecase of no assigned portfolios (in Jira) is tested here. In a real scenario, we should not have tickets without assigned portfolios. Nonetheless, this will not interrupt our program.
+- Portfolio Directors and Subcommittee now need to create a thread under the event with their collected feedback. They should send the message right when they send out the feedback form.
+
+![alt text](image.png)

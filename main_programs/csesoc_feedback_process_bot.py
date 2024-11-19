@@ -28,9 +28,12 @@ def read_data_for_bot():
         return {}
 
 def clear_file(file_path):
-    with open(file_path, 'w') as file:
-        # Opening in 'w' mode clears the file
-        pass
+    try:
+        with open(file_path, 'w') as file:
+            file.write('{}') 
+        print(f"File {file_path} cleared successfully.")
+    except Exception as e:
+        print(f"Failed to clear file {file_path}: {e}")
 
 @bot.event
 async def on_ready():
@@ -66,12 +69,18 @@ async def send_daily_ping():
             issue_url = issue_data.get('issue_url')
             responsible_ports = issue_data.get('issue_responsible_ports')
             if issue_url and responsible_ports:
-                message = f"Hello! An even needs feedback to be collected: {issue_summary}.\n"
+                message = f"Hello! An event needs feedback to be collected: {issue_summary}.\n"
                 message += f"Please check the the JIRA ticket at: {issue_url}\n"
+                message += f"Please create a thread on this message, and link your collected feedback.\n"
                 message += f"Responsible ports:\n"
                 for port in responsible_ports:
-                    member = discord.utils.get(guild.roles, name=port)
-                    message += f"{member.mention}\n"
+                    role = discord.utils.get(guild.roles, name=port)
+                    if role:
+                        message += f"{role.mention}\n"
+                    else:
+                        message += f"`{port}` role not found in the server.\n"
+                
+                message += "Thank you!\n\n"
 
                 await channel.send(message)
             else:
