@@ -85,25 +85,25 @@ Clean and easy to use!
 
 - The Jira Pipeline contains all the events.
 
-![alt text](image-1.png)
+![alt text](documentation_images/image-1.png)
 
 - Moving the event from `Launched To Done` when the event has taken place already. We now need to collect feedback (which is often forgotten). 
 - Our bot will help increase accountability and facilitate easier tracking of feedback for events. In turn, this will enable us to collect more rigorous data and feedback (as well as in more detail as we collect the feedback sooner), ultimately allowing us to improve event quality and better contribute to the CSE community.
 
-![alt text](image-2.png)
+![alt text](documentation_images/image-2.png)
 
-![alt text](image-3.png)
+![alt text](documentation_images/image-3.png)
 
 - The request goes to `ngrok`.
 
-![alt text](image-5.png)
+![alt text](documentation_images/image-5.png)
 
 - `ngrok` tunnels the request to Flask.
 
-![alt text](image-4.png)
+![alt text](documentation_images/image-4.png)
 
 - The bot pings the appropriate portfolios daily at a certain time.
     - Note that the edgecase of no assigned portfolios (in Jira) is tested here. In a real scenario, we should not have tickets without assigned portfolios. Nonetheless, this will not interrupt our program.
 - Portfolio Directors and Subcommittee now need to create a thread under the event with their collected feedback. They should send the message right when they send out the feedback form.
 
-![alt text](image.png)
+![alt text](documentation_images/image.png)
