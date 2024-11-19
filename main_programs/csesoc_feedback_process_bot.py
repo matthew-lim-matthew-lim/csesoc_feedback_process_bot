@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from discord.ext import commands
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+import json
 
 load_dotenv()
 
@@ -16,6 +17,20 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Schedule pings
 scheduler = AsyncIOScheduler()
+
+DATA_FILE = "jira_data.json"
+
+def read_data_for_bot():
+    try:
+        with open(DATA_FILE, 'r') as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+def clear_file(file_path):
+    with open(file_path, 'w') as file:
+        # Opening in 'w' mode clears the file
+        pass
 
 @bot.event
 async def on_ready():
@@ -45,22 +60,23 @@ async def send_daily_ping():
 
     guild = bot.get_guild(guild_id)
     if guild:
-        try:
-            channel = await bot.fetch_channel(channel_id)
-            if channel:
-                role = discord.utils.get(guild.roles, name="Outreach")
-                if role:
-                    await channel.send(f'Hello {role.mention}!')
-                else:
-                    await channel.send('Role "Outreach" not found.')
+        channel = await bot.fetch_channel(channel_id)
+        data = read_data_for_bot()
+        for issue_summary, issue_data in data.items():
+            issue_url = issue_data.get('issue_url')
+            responsible_ports = issue_data.get('issue_responsible_ports')
+            if issue_url and responsible_ports:
+                message = f"Hello! An even needs feedback to be collected: {issue_summary}.\n"
+                message += f"Please check the the JIRA ticket at: {issue_url}\n"
+                message += f"Responsible ports:\n"
+                for port in responsible_ports:
+                    member = discord.utils.get(guild.roles, name=port)
+                    message += f"{member.mention}\n"
+
+                await channel.send(message)
             else:
-                print(f'Channel with ID {channel_id} not found.')
-        except discord.NotFound:
-            print(f'Channel with ID {channel_id} not found.')
-        except discord.Forbidden:
-            print(f'Permission denied to access Channel ID {channel_id}.')
-        except discord.HTTPException as e:
-            print(f'Fetching channel failed: {e}')
+                print(f"Missing data for issue: {issue_summary}")
+        clear_file(DATA_FILE)
     else:
         print(f'Guild with ID {guild_id} not found.')
 
