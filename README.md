@@ -1,7 +1,13 @@
 # csesoc_feedback_process_bot
 Improve collection of feedback from attendees by reminding CSESoc directors to send out feedback forms.
 
-### What this Bot does
+### Solution Implemented Using Bot
+- Sends a webhook from Jira pipeline into our program (using a Flask server with `ngrok` tunneling).
+- The bot will ping the relavant roles in a discord channel.
+    - I expect that this will be sufficient, since we can introduce a process where relevant Directors or Subcom that were pinged need to start a thread with their feedback collection.
+        - This is superior to using the bot to ping on a cycle because it reduces clutter on the channel from duplicate messages. The issue with clutter is twofold: Firstly, people using the channel might be annoyed and mute/ignore it. Secondly, because there would be multiple threads and messages, it would be difficult to keep track of feedback collection.
+
+### Initial planning for the bot (Kept only for Documentation purposes)
 - Reads Feedback Master Sheet to see which Events have had their feedback filled out.
     - It does this by looking at the `Completed` column for the `Feedback Form` column.
 - Pings relevant directors/roles on a daily basis until the feedback form is filled out (as per the columns).
@@ -19,6 +25,7 @@ Improve collection of feedback from attendees by reminding CSESoc directors to s
         - You will only need to upload the necessary files to run to the Oracle Cloud. At the time of writing, I only needed to put up `main.py`, and my `.env`.
     - Oracle Cloud uses python 3.6, you will need to upgrade to python 3.9 to get everything to work (the discord.py library doesn't work with python 3.6).
     - Once you do the install of python 3.9, make sure you install the packages for the python 3.9 verion.
+- **UPDATE:** I used the free credit for Azure for Education, which allows for access to much better machinese than the Oracle free teir. I strongly recommend this over using Oracle free teir. That being said, the Oracle free teir VMs will also work. 
 
 ### Running on your VM
 
@@ -40,13 +47,19 @@ Improve collection of feedback from attendees by reminding CSESoc directors to s
 
 #### Connecting to Confluence Automation
 
+Nagivate to your Jira Board. For example, the URL for CSESOC's Jira board is: `https://csesoc.atlassian.net/jira/core/projects/PIPE/board`.
+
 In Confluence Automation, make a new automation rule.
 
 The automation rule should be like this:
 
 ![alt text](documentation_images/jira_pipeline_automation.png)
 
+The base URL should be the one generated from `ngrok` (recall that `ngrok` is a tunnel between the client and your local flask server, meaning your `ngrok` URL will be different).
+
 **Webhook:** 
+
+The Webhook is what Jira uses to send data to an external service. Here, we use it to send information about the Jira ticket to our Flask server.
 
 Web Request URL:
 
@@ -69,7 +82,7 @@ Webhook Header:
 ngrok-skip-browser-warning: true
 ```
 
-**The post request we receive:**
+**The post request we receive in our flask server:**
 
 ```
 127.0.0.1 - - [13/Jul/2024 15:59:55] "POST /jira-webhook HTTP/1.1" 200 -
@@ -77,7 +90,3 @@ ngrok-skip-browser-warning: true
 ```
 
 Clean and easy to use!
-
-### TODO:
-
-- Now that we have the post request, we need to store the `issue_responsible_ports` according to the `issue_summary`. We can store this in a `.json` file. Then, when the bot is scheduled to do the ping, we can read from the `.json` and from the sheets, pinging for the events that do not have the feedback filled checked off.
